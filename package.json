@@ -1,8 +1,12 @@
 {
   "name": "medview",
   "displayName": "medview",
-  "description": "Viewer for NIfTI/DICOM images",
-  "version": "0.0.1",
+  "description": "Professional medical image viewer for NIfTI and DICOM formats",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FrancescaFati/MedView"
+  },
+  "version": "1.0.0",
   "main": "./out/extension.js",
   "engines": {
     "vscode": "^1.98.0"
@@ -12,9 +16,34 @@
   ],
   "activationEvents": [
     "onStartupFinished",
-    "onCustomEditor:medview.viewer"
+    "onCustomEditor:medview.viewer",
+    "onCustomEditor:medview.series"
   ],
   "contributes": {
+    "commands": [
+      {
+        "command": "medview.openDicomSeries",
+        "title": "Open DICOM Series",
+        "category": "MedView"
+      },
+      {
+        "command": "medview.createDicomSeriesMarker",
+        "title": "Create DICOM Series Viewer",
+        "category": "MedView"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "medview.openDicomSeries",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "medview.createDicomSeriesMarker",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    },
     "customEditors": [
       {
         "viewType": "medview.viewer",
@@ -30,6 +59,16 @@
             "filenamePattern": "*.dcm"
           }
         ]
+      },
+      {
+        "viewType": "medview.series",
+        "displayName": "MedView DICOM Series Viewer",
+        "selector": [
+          {
+            "filenamePattern": ".series.dicom"
+          }
+        ],
+        "priority": "default"
       }
     ]
   },
@@ -53,6 +92,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "dicom-parser": "^1.8.21",
     "nifti-reader-js": "^0.8.0"
   }
 }
