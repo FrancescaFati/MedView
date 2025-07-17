@@ -1,14 +1,18 @@
-# MedViews
+# MedView
 
-A powerful NIfTI (.nii, .nii.gz) and DICOM (.dcm) medical image viewer for Visual Studio Code and Cursor IDE.
+<div align="center">
+  <img src="assets/logo.png" alt="MedView Logo" width="200"/>
+</div>
 
-![MedViews Logo](https://img.shields.io/badge/MedViews-Medical%20Imaging-blue?style=for-the-badge)
+A versatile NIfTI (.nii, .nii.gz) and DICOM (.dcm) medical image viewer for Visual Studio Code and Cursor IDE.
+
+![MedView Logo](https://img.shields.io/badge/MedView-Medical%20Imaging-blue?style=for-the-badge)
 ![VS Code](https://img.shields.io/badge/VS%20Code-Extension-green?style=for-the-badge)
 ![Cursor](https://img.shields.io/badge/Cursor-Compatible-purple?style=for-the-badge)
 
 ## 🏥 Purpose
 
-MedViews brings professional medical imaging capabilities directly into your code editor. Whether you're a researcher, developer, or medical professional working with neuroimaging data, this extension provides a comprehensive medical image viewer supporting both NIfTI and DICOM formats with all the essential tools for medical image analysis.
+MedView allows visualising medical images directly into your code editor. Whether you're a researcher, developer, or medical professional working with medical images, this extension provides a comprehensive medical image viewer supporting both NIfTI and DICOM formats with all the essential tools for medical image visualization.
 
 ## ✨ Features
 
@@ -42,13 +46,13 @@ View your medical images in all three anatomical planes:
 ### Visual Studio Code
 1. Open VS Code
 2. Go to Extensions (`Ctrl+Shift+X` or `Cmd+Shift+X`)
-3. Search for "MedViews"
+3. Search for "MedView"
 4. Click "Install"
 
 ### Cursor IDE
 1. Open Cursor
 2. Go to Extensions (`Ctrl+Shift+X` or `Cmd+Shift+X`)
-3. Search for "MedViews"
+3. Search for "MedView"
 4. Click "Install"
 
 ### Manual Installation
@@ -60,15 +64,15 @@ View your medical images in all three anatomical planes:
 ## 🚀 Getting Started
 
 ### After Installation
-MedViews automatically registers as the default viewer for NIfTI and DICOM files. If you need to manually set it:
+MedView automatically registers as the default viewer for NIfTI and DICOM files. If you need to manually set it:
 
 1. Right-click on any `.nii`, `.nii.gz`, or `.dcm` file
 2. Select "Open With..."
-3. Choose "MedViews Medical Image Viewer"
+3. Choose "MedView Medical Image Viewer"
 4. Check "Configure default editor" to make it permanent
 
 ### First Use
-Simply open any NIfTI or DICOM file in your workspace - MedViews will automatically launch and begin loading your medical image data.
+Simply open any NIfTI or DICOM file in your workspace - MedView will automatically launch and begin loading your medical image data.
 
 ## 🎮 Usage Guide
 
@@ -109,14 +113,14 @@ Simply open any NIfTI or DICOM file in your workspace - MedViews will automatica
 ## 🐛 Troubleshooting
 
 ### Common Issues
-**Q: Medical image files don't open with MedViews automatically**
-A: Right-click the file → "Open With..." → "MedViews Medical Image Viewer" → Check "Configure default editor"
+**Q: Medical image files don't open with MedView automatically**
+A: Right-click the file → "Open With..." → "MedView Medical Image Viewer" → Check "Configure default editor"
 
 **Q: Images appear distorted or stretched**
-A: MedViews automatically applies correct aspect ratios based on voxel spacing. If issues persist, check your file's header information.
+A: MedView automatically applies correct aspect ratios based on voxel spacing. If issues persist, check your file's header information.
 
 **Q: Large files load slowly**
-A: MedViews uses progressive loading. Header information loads first, followed by image data in the background.
+A: MedView uses progressive loading. Header information loads first, followed by image data in the background.
 
 **Q: DICOM files show limited controls**
 A: DICOM files are single-slice images, so multi-planar reconstruction controls are hidden. Use brightness/contrast and transformation controls for optimal viewing.
@@ -130,7 +134,7 @@ We welcome contributions! Please feel free to:
 
 ## 📄 License
 
-This extension is released under the MIT License. See the LICENSE file for details.
+This extension is released under the GPLv3 License. See the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 
