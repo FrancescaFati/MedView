@@ -1,18 +1,42 @@
 {
   "name": "medview",
-  "displayName": "medview",
-  "description": "Professional medical image viewer for NIfTI and DICOM formats",
+  "displayName": "MedView",
+  "description": "Professional medical image viewer for NIfTI and DICOM formats with multi-planar reconstruction",
+  "version": "1.0.0",
+  "publisher": "francescafati",
+  "author": {
+    "name": "Francesca Fati",
+    "email": "francesca.fati@example.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/FrancescaFati/MedView"
   },
-  "version": "1.0.0",
+  "homepage": "https://github.com/FrancescaFati/MedView#readme",
+  "bugs": {
+    "url": "https://github.com/FrancescaFati/MedView/issues"
+  },
+  "license": "MIT",
   "main": "./out/extension.js",
   "engines": {
     "vscode": "^1.98.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "medical",
+    "imaging",
+    "nifti",
+    "dicom",
+    "viewer",
+    "radiology",
+    "neuroimaging",
+    "mri",
+    "ct",
+    "3d",
+    "multi-planar"
   ],
   "activationEvents": [
     "onStartupFinished",
@@ -20,30 +44,6 @@
     "onCustomEditor:medview.series"
   ],
   "contributes": {
-    "commands": [
-      {
-        "command": "medview.openDicomSeries",
-        "title": "Open DICOM Series",
-        "category": "MedView"
-      },
-      {
-        "command": "medview.createDicomSeriesMarker",
-        "title": "Create DICOM Series Viewer",
-        "category": "MedView"
-      }
-    ],
-    "menus": {
-      "explorer/context": [
-        {
-          "command": "medview.openDicomSeries",
-          "when": "explorerResourceIsFolder"
-        },
-        {
-          "command": "medview.createDicomSeriesMarker",
-          "when": "explorerResourceIsFolder"
-        }
-      ]
-    },
     "customEditors": [
       {
         "viewType": "medview.viewer",
@@ -59,16 +59,6 @@
             "filenamePattern": "*.dcm"
           }
         ]
-      },
-      {
-        "viewType": "medview.series",
-        "displayName": "MedView DICOM Series Viewer",
-        "selector": [
-          {
-            "filenamePattern": ".series.dicom"
-          }
-        ],
-        "priority": "default"
       }
     ]
   },
