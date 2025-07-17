@@ -1,12 +1,12 @@
 {
-  "name": "medview",
+  "name": "MedView",
   "displayName": "MedView",
-  "description": "Professional medical image viewer for NIfTI and DICOM formats with multi-planar reconstruction",
+  "description": "A medical image viewer for NIfTI and DICOM formats",
   "version": "1.0.0",
-  "publisher": "francescafati",
+  "publisher": "FrancescaFati",
   "author": {
     "name": "Francesca Fati",
-    "email": "francesca.fati@example.com"
+    "email": "francesca.fati@polimi.it"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/FrancescaFati/MedView/issues"
   },
-  "license": "MIT",
+  "license": "GPLv3",
   "main": "./out/extension.js",
   "engines": {
     "vscode": "^1.98.0"
