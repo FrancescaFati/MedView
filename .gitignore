@@ -7,3 +7,4 @@ node_modules
 *.DCM
 *.nii.gz
 *.nii
+.DS_Store
