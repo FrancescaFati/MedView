@@ -2,7 +2,7 @@
   "name": "MedView",
   "displayName": "MedView",
   "description": "A medical image viewer for NIfTI and DICOM formats",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "FrancescaFati",
   "icon": "assets/logo.png",
   "author": {
