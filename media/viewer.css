@@ -1,0 +1,388 @@
+* { box-sizing: border-box; }
+
+body {
+    font-family: var(--vscode-font-family);
+    background-color: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+.header {
+    padding: 8px 12px;
+    background-color: var(--vscode-sideBar-background);
+    border-bottom: 1px solid var(--vscode-widget-border);
+    flex-shrink: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.header .meta {
+    font-size: 11px;
+    opacity: 0.7;
+    font-variant-numeric: tabular-nums;
+}
+
+.viewer-container {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    overflow: hidden;
+}
+
+.left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    position: relative;
+    overflow: hidden;
+}
+
+#imageCanvas {
+    image-rendering: pixelated;
+    cursor: crosshair;
+    transform-origin: center center;
+    outline: none;
+}
+
+.bottom-controls {
+    padding: 10px;
+    background-color: var(--vscode-sideBar-background);
+    border-top: 1px solid var(--vscode-widget-border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.slice-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.slice-slider-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.axis-toggle-group {
+    display: flex;
+    gap: 5px;
+}
+
+.axis-toggle {
+    padding: 8px 12px;
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    border: 1px solid var(--vscode-button-border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 80px;
+    min-height: 85px;
+}
+
+.axis-toggle.active {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+}
+
+.axis-toggle img {
+    width: 60px;
+    height: 60px;
+    opacity: 0.8;
+    display: block;
+}
+
+.axis-toggle.active img { opacity: 1; }
+.axis-toggle span { text-align: center; white-space: nowrap; }
+
+.controls {
+    width: 250px;
+    padding: 15px;
+    background-color: var(--vscode-sideBar-background);
+    border-left: 1px solid var(--vscode-widget-border);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    overflow-y: auto;
+    flex-shrink: 0;
+}
+
+.control-section {
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--vscode-widget-border);
+}
+
+.control-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.control-section h4 {
+    margin: 0 0 10px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.control-group:last-child { margin-bottom: 0; }
+
+.control-group label {
+    font-size: 12px;
+    color: var(--vscode-foreground);
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-container span {
+    font-size: 11px;
+    min-width: 38px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.8;
+}
+
+input[type="range"] {
+    flex: 1;
+    min-width: 0;
+    height: 20px;
+    background: var(--vscode-scrollbarSlider-background);
+    outline: none;
+    border-radius: 10px;
+}
+
+select {
+    width: 100%;
+    padding: 5px;
+    background: var(--vscode-dropdown-background);
+    color: var(--vscode-dropdown-foreground);
+    border: 1px solid var(--vscode-dropdown-border);
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+button.primary,
+button.secondary {
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    width: 100%;
+    border: 1px solid transparent;
+}
+
+button.primary {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border: none;
+}
+
+button.primary:hover { background: var(--vscode-button-hoverBackground); }
+
+button.secondary {
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    border-color: var(--vscode-button-border);
+}
+
+button.secondary:hover { background: var(--vscode-button-secondaryHoverBackground); }
+
+.transform-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.transform-row button {
+    flex: 1;
+    padding: 8px 6px;
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    border: 1px solid var(--vscode-button-border);
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.transform-row button.active {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+}
+
+.segment-mode {
+    display: flex;
+    gap: 8px;
+}
+
+.segment-mode button { flex: 1; }
+
+/* Label list */
+
+.label-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: 8px;
+}
+
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 4px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.label-row:hover { background: var(--vscode-list-hoverBackground); }
+.label-row.hidden { opacity: 0.4; }
+
+.label-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.label-name { flex: 1; }
+
+.label-count {
+    font-size: 10px;
+    opacity: 0.6;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Overlays */
+
+.navigation-hint {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: white;
+    padding: 4px 9px;
+    border-radius: 3px;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+.status-readout {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: white;
+    padding: 4px 9px;
+    border-radius: 3px;
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 11px;
+    pointer-events: none;
+    white-space: pre;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--vscode-editor-background);
+    padding: 18px 22px;
+    border-radius: 4px;
+    border: 1px solid var(--vscode-widget-border);
+    z-index: 1000;
+    min-width: 260px;
+    text-align: center;
+}
+
+.loading .phase {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.loading .detail {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    background-color: var(--vscode-progressBar-background, #333);
+    border-radius: 2px;
+    overflow: hidden;
+    opacity: 0.35;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--vscode-progressBar-foreground, var(--vscode-button-background));
+    width: 0%;
+    transition: width 0.15s linear;
+}
+
+.error {
+    color: var(--vscode-errorForeground);
+    background-color: var(--vscode-inputValidation-errorBackground);
+    padding: 14px 18px;
+    border-radius: 4px;
+    border: 1px solid var(--vscode-inputValidation-errorBorder);
+    max-width: 70%;
+}
+
+.error h3 { margin: 0 0 8px 0; font-size: 13px; }
+.error p { margin: 0; font-size: 12px; line-height: 1.5; }
+
+.hidden-el { display: none !important; }

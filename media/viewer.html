@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${cspSource} data:; style-src ${cspSource}; script-src ${cspSource} 'nonce-${nonce}'; connect-src ${cspSource}; worker-src blob:; child-src blob:;">
+    <link rel="stylesheet" href="${styleUri}">
+    <title>MedView - ${fileName}</title>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h3>${fileName}</h3>
+            <span class="meta" id="headerMeta"></span>
+        </div>
+
+        <div class="viewer-container">
+            <div class="left-panel">
+                <div class="canvas-container" id="canvasContainer">
+                    <canvas id="imageCanvas" tabindex="0"></canvas>
+                    <div class="status-readout hidden-el" id="statusReadout"></div>
+                    <div class="navigation-hint">Arrow keys, mouse wheel or slider to change slice</div>
+                    <div class="loading" id="loading">
+                        <div class="phase" id="loadingPhase">Opening image&hellip;</div>
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <div class="detail" id="loadingDetail"></div>
+                    </div>
+                </div>
+                <div class="bottom-controls">
+                    <div class="slice-controls">
+                        <div class="slice-slider-container" id="sliceSliderContainer">
+                            <label for="sliceSlider">Slice</label>
+                            <input type="range" id="sliceSlider" min="0" max="0" value="0">
+                            <span id="sliceValue">0</span>
+                        </div>
+                        <div class="axis-toggle-group" id="axisToggleGroup">
+                            <button class="axis-toggle active" data-axis="axial">
+                                <img src="${axialIconUri}" alt="">
+                                <span>Axial</span>
+                            </button>
+                            <button class="axis-toggle" data-axis="sagittal">
+                                <img src="${sagittalIconUri}" alt="">
+                                <span>Sagittal</span>
+                            </button>
+                            <button class="axis-toggle" data-axis="coronal">
+                                <img src="${frontalIconUri}" alt="">
+                                <span>Coronal</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="control-section">
+                    <h4>Intensity</h4>
+                    <div class="control-group">
+                        <label for="brightnessSlider">Brightness</label>
+                        <div class="slider-container">
+                            <input type="range" id="brightnessSlider" min="0" max="200" value="100">
+                            <span id="brightnessValue">100%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="contrastSlider">Contrast</label>
+                        <div class="slider-container">
+                            <input type="range" id="contrastSlider" min="0" max="200" value="100">
+                            <span id="contrastValue">100%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <button class="primary" id="resetIntensityButton">Reset intensity</button>
+                    </div>
+                </div>
+
+                <div class="control-section" id="segmentationSection">
+                    <h4>Segmentation</h4>
+                    <div class="control-group">
+                        <select id="segmentationSelect">
+                            <option value="">None</option>
+                        </select>
+                    </div>
+                    <div id="segmentationControls" class="hidden-el">
+                        <div class="control-group">
+                            <label for="segOpacitySlider">Opacity</label>
+                            <div class="slider-container">
+                                <input type="range" id="segOpacitySlider" min="0" max="100" value="45">
+                                <span id="segOpacityValue">45%</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="segment-mode">
+                                <button class="secondary active" id="segModeFill" data-mode="fill">Fill</button>
+                                <button class="secondary" id="segModeOutline" data-mode="outline">Outline</button>
+                            </div>
+                        </div>
+                        <div class="label-list" id="labelList"></div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h4>Orientation</h4>
+                    <div class="transform-row">
+                        <button id="rotateCCW">Rotate &#8634;</button>
+                        <button id="rotateCW">Rotate &#8635;</button>
+                    </div>
+                    <div class="transform-row">
+                        <button id="flipH">Flip H</button>
+                        <button id="flipV">Flip V</button>
+                    </div>
+                    <div class="control-group">
+                        <button class="primary" id="resetTransformButton">Reset orientation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script nonce="${nonce}">
+        window.MEDVIEW_CONFIG = ${config};
+    </script>
+    <script nonce="${nonce}" src="${viewerUri}"></script>
+</body>
+</html>

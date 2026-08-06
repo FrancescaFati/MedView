@@ -1,0 +1,12 @@
+# Sources and build tooling: only `out/` and `media/` are needed at runtime.
+src/**
+.vscode/**
+.vscode-test/**
+node_modules/**
+out/**/*.map
+out/test/**
+**/*.ts
+tsconfig.json
+eslint.config.mjs
+.gitignore
+*.vsix

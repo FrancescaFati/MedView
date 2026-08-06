@@ -2,7 +2,7 @@
   "name": "MedView",
   "displayName": "MedView",
   "description": "A medical image viewer for NIfTI and DICOM formats",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "publisher": "FrancescaFati",
   "icon": "assets/logo.png",
   "author": {
@@ -37,7 +37,8 @@
     "mri",
     "ct",
     "3d",
-    "multi-planar"
+    "multi-planar",
+    "segmentation"
   ],
   "activationEvents": [
     "onStartupFinished",

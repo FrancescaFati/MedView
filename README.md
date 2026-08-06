@@ -32,13 +32,27 @@ View your medical images in all three anatomical planes:
   - Interactive slice slider
 - **Real-time Updates**: All changes are applied instantly with smooth GPU-accelerated rendering
 
+### 🎨 Segmentation Overlay
+Display a label volume on top of the image you are viewing:
+- **Automatic discovery**: MedView looks for label volumes next to the image and in
+  its subfolders, so a layout like `case/CT.nii.gz` plus
+  `case/ovseg_predictions/CT.nii.gz` is picked up with no configuration. Use
+  `Browse…` in the dropdown for anything it misses.
+- **Per-label colours** with the voxel count for each label
+- **Fill or outline** rendering, and an opacity slider
+- **Click any label** to hide or show it
+- Works in all three planes, and refuses mismatched grids rather than
+  silently misaligning the overlay
+
 ### 🖼️ Professional Medical Imaging Features
 - **Multi-Format Support**: Handles both NIfTI (.nii, .nii.gz) and DICOM (.dcm) formats
+- **Fast loading of large volumes**: files are streamed to the viewer as binary and
+  decoded in a background worker using native gzip, so a 330 MB compressed CT
+  (a 760 MB volume) opens in seconds and the interface stays responsive
 - **Native Resolution Display**: Maintains original image quality without interpolation
 - **Physical Aspect Ratio**: Respects voxel spacing for accurate anatomical proportions
 - **Global Intensity Normalization**: Consistent brightness across all slices
 - **Compressed File Support**: Handles both .nii and .nii.gz formats seamlessly
-- **Memory Efficient**: Smart caching and lazy loading for large datasets
 - **DICOM Single-Slice Viewing**: Optimized interface for DICOM files with simplified controls
 
 ## 📦 Installation
