@@ -163,11 +163,20 @@ class MedicalImageViewerProvider implements vscode.CustomReadonlyEditorProvider 
         try {
             const bytes = await vscode.workspace.fs.readFile(vscode.Uri.parse(uriString));
             for (let offset = 0; offset < bytes.byteLength; offset += CHUNK_BYTES) {
+                // Copied into a fresh, zero-offset Uint8Array rather than sent as a
+                // `subarray` view: webview.postMessage's binary transfer has a history
+                // of mishandling typed-array views into a larger buffer, and
+                // `Uint8Array.prototype.slice` is not safe here either since
+                // `readFile` may return a Node `Buffer`, whose overridden `.slice()`
+                // is itself a view, not a copy.
+                const end = Math.min(bytes.byteLength, offset + CHUNK_BYTES);
+                const chunk = new Uint8Array(end - offset);
+                chunk.set(bytes.subarray(offset, end));
                 await webview.postMessage({
                     type: 'fileChunk',
                     id,
                     totalBytes: bytes.byteLength,
-                    bytes: bytes.subarray(offset, Math.min(bytes.byteLength, offset + CHUNK_BYTES))
+                    bytes: chunk
                 });
             }
             await webview.postMessage({ type: 'fileEnd', id, totalBytes: bytes.byteLength });

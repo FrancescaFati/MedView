@@ -140,37 +140,117 @@
     }
 
     /**
-     * Asks the worker to load a URL. If the webview cannot reach the file
-     * directly (virtual or remote filesystems, or a file outside the editor's
-     * resource roots) the bytes are pulled through the extension host instead.
+     * Loads a volume or segmentation and hands the raw bytes to the worker.
+     *
+     * The bytes are fetched on the *main* webview thread from the resource
+     * URI. That is the same mechanism that already loads viewer.js, the CSS
+     * and the NIfTI bundle, so it is known to work here. An earlier design
+     * fetched from inside the Worker instead, but webview hosts serve their
+     * resources through a service worker that only answers the main thread,
+     * so the worker's fetch failed or, worse, hung forever -- leaving the
+     * viewer stuck on a blank loading screen. If the main-thread fetch fails
+     * (virtual or unusual filesystems), the extension host streams the bytes.
+     *
+     * On a slow or network-mounted filesystem the resource fetch can sit
+     * completely idle -- no headers, no bytes -- for the ~30s VS Code takes
+     * to give up and answer with an HTTP 408. Both transports end up reading
+     * the same underlying disk, so that wait buys nothing: if nothing at all
+     * has arrived after a short grace period, it is switched to the host
+     * path early rather than sitting out the rest of VS Code's timeout.
+     * Fetches that are genuinely progressing, just slowly, are left alone.
      */
+    const FETCH_STALL_GRACE_MS = 4000;
+
     async function loadThroughWorker(uri, role, name, format) {
         await ensureWorker();
-        const id = nextRequestId++;
-        const promise = new Promise((resolve, reject) => {
-            pending.set(id, { resolve, reject, role });
-        });
-        worker.postMessage({ type: 'load', id, role, name, format, url: toResourceUri(uri) });
+
+        const controller = new AbortController();
+        const progress = { bytes: 0 };
+        const fetchPromise = fetchResource(uri, role, controller.signal, progress);
+
+        if (await isStalled(fetchPromise, progress, FETCH_STALL_GRACE_MS)) {
+            controller.abort();
+            reportProgress(role, 'download', 0);
+            return await loadThroughHost(uri, role, name, format);
+        }
+
         try {
-            return await promise;
+            const buffer = await fetchPromise;
+            return await decodeBuffer(buffer, role, name, format);
         } catch (error) {
-            if (!/HTTP|fetch|Failed to fetch|NetworkError/i.test(error.message)) { throw error; }
             reportProgress(role, 'download', 0);
             return await loadThroughHost(uri, role, name, format);
         }
     }
 
-    async function loadThroughHost(uri, role, name, format) {
-        const buffer = await requestHostBytes(uri, role);
+    /** True if `promise` neither settles nor reports any progress within `ms`. */
+    function isStalled(promise, progress, ms) {
+        return new Promise((resolve) => {
+            let settled = false;
+            const timer = setTimeout(() => {
+                if (!settled) { resolve(progress.bytes === 0); }
+            }, ms);
+            promise.then(
+                () => { settled = true; clearTimeout(timer); resolve(false); },
+                () => { settled = true; clearTimeout(timer); resolve(false); }
+            );
+        });
+    }
+
+    /** Fetches a resource URI on the main thread, reporting download progress. */
+    async function fetchResource(uri, role, signal, progress) {
+        const url = toResourceUri(uri);
+        const response = await fetch(url, signal ? { signal } : undefined);
+        if (!response.ok) { throw new Error('HTTP ' + response.status); }
+
+        const declared = Number(response.headers.get('content-length')) || 0;
+        if (!response.body || typeof response.body.getReader !== 'function') {
+            const buffer = await response.arrayBuffer();
+            if (progress) { progress.bytes = buffer.byteLength; }
+            reportProgress(role, 'download', 100);
+            return buffer;
+        }
+
+        const reader = response.body.getReader();
+        const chunks = [];
+        let total = 0;
+        let lastReported = -1;
+        for (;;) {
+            const { done, value } = await reader.read();
+            if (done) { break; }
+            chunks.push(value);
+            total += value.length;
+            if (progress) { progress.bytes = total; }
+            if (declared > 0) {
+                const pct = Math.min(99, Math.floor((total / declared) * 100));
+                if (pct !== lastReported) { lastReported = pct; reportProgress(role, 'download', pct); }
+            }
+        }
+        reportProgress(role, 'download', 100);
+
+        if (chunks.length === 1) { return chunks[0].buffer.slice(chunks[0].byteOffset, chunks[0].byteOffset + chunks[0].length); }
+        const out = new Uint8Array(total);
+        let offset = 0;
+        for (const chunk of chunks) { out.set(chunk, offset); offset += chunk.length; }
+        return out.buffer;
+    }
+
+    /** Transfers a raw file buffer to the worker for decode. */
+    function decodeBuffer(buffer, role, name, format) {
         const id = nextRequestId++;
         const promise = new Promise((resolve, reject) => {
             pending.set(id, { resolve, reject, role });
         });
         worker.postMessage({ type: 'loadBuffer', id, role, name, format, buffer }, [buffer]);
-        return await promise;
+        return promise;
     }
 
-    /** Reassembles the file from chunked host messages (fallback transport). */
+    async function loadThroughHost(uri, role, name, format) {
+        const buffer = await requestHostBytes(uri, role);
+        return await decodeBuffer(buffer, role, name, format);
+    }
+
+    /** Reassembles the file from the extension host's chunked byte stream. */
     function requestHostBytes(uri, role) {
         return new Promise((resolve, reject) => {
             const id = nextRequestId++;

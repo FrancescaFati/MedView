@@ -4,6 +4,18 @@ All notable changes to the "MedView" extension will be documented in this file.
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.1.1] - 2026-08-22
+
+### Fixed
+- On a slow or network-mounted filesystem, the viewer no longer sits idle for
+  VS Code's ~30s timeout before falling back to the extension host: if a
+  resource fetch reports zero bytes after 4 seconds, it is aborted and the
+  fallback path is used immediately.
+- File chunks sent from the extension host to the webview are now copied into
+  a fresh buffer instead of sent as a view into the file's full byte array,
+  avoiding a case where `postMessage`'s binary transfer could mishandle a
+  typed-array view into a larger buffer.
+
 ## [1.1.0] - 2026-08-06
 
 ### Added
